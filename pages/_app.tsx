@@ -1,10 +1,13 @@
 import { ChakraProvider } from '@chakra-ui/react';
+import Layout from '@components/Layout';
 import { AppProps } from 'next/app';
-import { FC } from 'react';
+import React, { FC } from 'react';
 
 const App: FC<AppProps> = ({ Component, pageProps }) => (
   <ChakraProvider>
-    <Component {...pageProps} />
+    <Layout>
+      <Component {...pageProps} />
+    </Layout>
   </ChakraProvider>
 );
 

@@ -1,7 +1,13 @@
-import { FC } from 'react'
+import React, { FC } from 'react';
+import Navigation from '../Navigation';
 
-const Layout: FC = ({ children }) => (
-  <div>This layout is reusable. {children}</div>
-)
+const Layout: FC = ({ children }) => {
+  return (
+    <>
+      <Navigation />
+      <div>{children}</div>
+    </>
+  );
+};
 
-export default Layout
+export default Layout;
