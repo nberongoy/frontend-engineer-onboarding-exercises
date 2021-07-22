@@ -48,7 +48,7 @@ const Login: FC = () => {
           <form onSubmit={handleSubmit(onLogin)}>
             <FormControl mt="5" id="email">
               <FormLabel>Email </FormLabel>
-              <Input type="email" placeholder="email@example.com" {...register('email')} />
+              <Input type="text" placeholder="email@example.com" {...register('email')} />
               <FormHelperText color="red.500">{errors.email?.message}</FormHelperText>
             </FormControl>
 

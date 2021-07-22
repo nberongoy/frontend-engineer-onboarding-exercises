@@ -6,9 +6,12 @@ export const loginForm = yup.object().shape({
 });
 
 export const signupForm = yup.object().shape({
-  firstname: yup.string().required('Frist name is required.'),
-  lastname: yup.string().required('Last name is required.'),
+  firstName: yup.string().required('Frist name is required.'),
+  lastName: yup.string().required('Last name is required.'),
   email: yup.string().required('Email is required.').email('Please input an email.'),
   password: yup.string().required('Password is required.'),
-  confirmPassword: yup.string().required('Confirm password is required.'),
+  confirmPassword: yup
+    .string()
+    .required('Confirm password is required.')
+    .oneOf([yup.ref('password'), null], 'Passwords must match'),
 });
