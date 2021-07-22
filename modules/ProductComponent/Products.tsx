@@ -9,7 +9,7 @@ const Products: FC = () => (
     </Box>
 
     <Divider />
-    <Grid templateColumns="repeat(5, 1fr)" gap={10}>
+    <Grid templateColumns="repeat(4, 1fr)" gap={3}>
       {Array(20)
         .fill('')
         .map(() => (
