@@ -5,7 +5,7 @@ import NextLink from 'next/link';
 import React, { FC } from 'react';
 
 const Navigation: FC = () => (
-  <Flex p="2" backgroundColor="white">
+  <Flex p="2" backgroundColor="white" className={styles.navigationContainer}>
     <Box ml="24" p="2">
       <NextLink href="/">
         <NextImage src="/Logo.png" width={143} height={32} className={styles.companyLogo} />

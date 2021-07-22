@@ -1,4 +1,3 @@
-import Footer from '@components/Footer';
 import React, { FC } from 'react';
 import Navigation from '../Navigation';
 
@@ -7,7 +6,7 @@ const Layout: FC = ({ children }) => {
     <>
       <Navigation />
       <div>{children}</div>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };
