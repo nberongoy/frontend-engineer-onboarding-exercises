@@ -1,9 +1,30 @@
-import { ChevronRightIcon } from '@chakra-ui/icons';
-import { Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Flex, Heading, Image, Text } from '@chakra-ui/react';
+import { ChevronRightIcon, DeleteIcon, Icon } from '@chakra-ui/icons';
+import {
+  Box,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  Button,
+  Flex,
+  Heading,
+  Image,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Spacer,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react';
 import NextLink from 'next/link';
 import React, { FC } from 'react';
+import { FaEdit } from 'react-icons/fa';
 
 const Product: FC = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const product = {
     imageUrl: '/media_placeholder_2.png',
     imageAlt: 'Product image',
@@ -36,7 +57,18 @@ const Product: FC = () => {
           <Image src={product.imageUrl} alt={product.imageAlt} />
 
           <Box ml="10">
-            <Heading mb="5">{product.title}</Heading>
+            <Box d="flex">
+              <Heading mb="5">{product.title}</Heading>
+              <Spacer />
+              <NextLink href={`/product/edit/${product.id}`}>
+                <Button mr="2" bg="gray.100" variant="ghost">
+                  <Icon as={FaEdit} />
+                </Button>
+              </NextLink>
+              <Button bg="gray.100" variant="ghost" onClick={onOpen}>
+                <DeleteIcon />
+              </Button>
+            </Box>
             <Text>{product.description}</Text>
           </Box>
         </Flex>
@@ -49,6 +81,25 @@ const Product: FC = () => {
           </Button>
         </NextLink>
       </Box>
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Delete Product</ModalHeader>
+          <ModalBody>
+            <Text>Are you sure you want to delete this product? You can’t undo this action afterwards.</Text>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="gray" variant="ghost" mr={3} onClick={onClose}>
+              Cancel
+            </Button>
+            <Button colorScheme="red" onClick={onClose}>
+              Delete
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 };
