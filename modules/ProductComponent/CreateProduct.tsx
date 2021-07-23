@@ -47,8 +47,8 @@ const CreateProduct: FC = () => {
     await Router.push('/products');
   };
 
-  const onCancel = async (): Promise<void> => {
-    await Router.push('/products');
+  const onCancel = (): void => {
+    Router.back();
   };
 
   return (

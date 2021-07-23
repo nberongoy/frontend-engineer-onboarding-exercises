@@ -1,7 +1,19 @@
-import { ChevronRightIcon } from '@chakra-ui/icons';
-import { Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Flex, Heading, Image, Text } from '@chakra-ui/react';
+import { ChevronRightIcon, DeleteIcon, Icon } from '@chakra-ui/icons';
+import {
+  Box,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  Button,
+  Flex,
+  Heading,
+  Image,
+  Spacer,
+  Text,
+} from '@chakra-ui/react';
 import NextLink from 'next/link';
 import React, { FC } from 'react';
+import { FaEdit } from 'react-icons/fa';
 
 const Product: FC = () => {
   const product = {
@@ -36,7 +48,18 @@ const Product: FC = () => {
           <Image src={product.imageUrl} alt={product.imageAlt} />
 
           <Box ml="10">
-            <Heading mb="5">{product.title}</Heading>
+            <Box d="flex">
+              <Heading mb="5">{product.title}</Heading>
+              <Spacer />
+              <NextLink href={`/product/edit/${product.id}`}>
+                <Button mr="2" bg="gray.100" variant="ghost">
+                  <Icon as={FaEdit} />
+                </Button>
+              </NextLink>
+              <Button bg="gray.100" variant="ghost">
+                <DeleteIcon />
+              </Button>
+            </Box>
             <Text>{product.description}</Text>
           </Box>
         </Flex>
