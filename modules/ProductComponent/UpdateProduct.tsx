@@ -75,6 +75,7 @@ const UpdateProduct: FC = () => {
             <GridItem colSpan={2}>
               <FormControl id="photo">
                 <FormLabel>Photo </FormLabel>
+                <input type="file" />
               </FormControl>
             </GridItem>
 
