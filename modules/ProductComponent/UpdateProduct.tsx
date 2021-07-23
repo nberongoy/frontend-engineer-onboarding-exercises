@@ -14,6 +14,7 @@ import {
   Textarea,
   useToast,
 } from '@chakra-ui/react';
+import Upload from '@components/Upload';
 import { yupResolver } from '@hookform/resolvers/yup';
 import styles from '@styles/Product.module.css';
 import Router from 'next/router';
@@ -71,15 +72,15 @@ const UpdateProduct: FC = () => {
 
       <Box className={styles.formProductCard} p="62">
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Grid templateColumns="repeat(6, 1fr)" gap={1}>
+          <Grid templateColumns="repeat(6, 1fr)" gap={6}>
             <GridItem colSpan={2}>
               <FormControl id="photo">
                 <FormLabel>Photo </FormLabel>
-                <input type="file" />
+                <Upload />
               </FormControl>
             </GridItem>
 
-            <GridItem colSpan={4} b>
+            <GridItem colSpan={4}>
               <FormControl id="type">
                 <FormLabel>Type </FormLabel>
                 <Input type="text" placeholder="Enter Title" {...register('title')} />
