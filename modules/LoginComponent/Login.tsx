@@ -8,11 +8,34 @@ import {
   FormLabel,
   Heading,
   Input,
+  LinkBox,
   LinkOverlay,
 } from '@chakra-ui/react';
+import { yupResolver } from '@hookform/resolvers/yup';
+import Router from 'next/router';
 import React, { FC } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { loginForm } from './validation';
+
+interface ILoginFormData {
+  email: string;
+  password: string;
+}
 
 const Login: FC = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ILoginFormData>({
+    resolver: yupResolver(loginForm),
+  });
+
+  const onLogin: SubmitHandler<ILoginFormData> = async () => {
+    localStorage.setItem('token', 'isLoggedIn');
+    await Router.push('/products');
+  };
+
   return (
     <Center>
       <Box borderWidth="1px" mt="50" width={600}>
@@ -24,23 +47,26 @@ const Login: FC = () => {
 
         <Divider />
         <Box p="5">
-          <form>
+          <form onSubmit={handleSubmit(onLogin)}>
             <FormControl mt="5" id="email">
               <FormLabel>Email </FormLabel>
-              <Input type="email" placeholder="email@example.com" />
+              <Input type="text" placeholder="email@example.com" {...register('email')} />
+              <FormHelperText color="red.500">{errors.email?.message}</FormHelperText>
             </FormControl>
 
             <FormControl mt="5" id="password">
               <FormLabel>Password </FormLabel>
-              <Input type="pasword" placeholder="********" />
-              <FormHelperText textAlign="right">
-                <LinkOverlay color="purple.500" href="#">
-                  Forgot Password
-                </LinkOverlay>
-              </FormHelperText>
+              <Input type="pasword" placeholder="********" {...register('password')} />
+              <FormHelperText color="red.500">{errors.password?.message}</FormHelperText>
             </FormControl>
 
-            <Button mt="10" colorScheme="purple" isFullWidth>
+            <LinkBox textAlign="right">
+              <LinkOverlay color="purple.500" href="#">
+                Forgot Password
+              </LinkOverlay>
+            </LinkBox>
+
+            <Button type="submit" mt="10" colorScheme="purple" isFullWidth>
               Log in
             </Button>
           </form>
