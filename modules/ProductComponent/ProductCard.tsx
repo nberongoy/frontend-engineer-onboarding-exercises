@@ -1,5 +1,6 @@
-import { Box, Button, Image, Text } from '@chakra-ui/react';
+import { Box, Button, IconButton, Image, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react';
 import styles from '@styles/Product.module.css';
+import NextImage from 'next/image';
 import NextLink from 'next/link';
 import React, { FC } from 'react';
 
@@ -14,29 +15,49 @@ const ProductCard: FC = () => {
   };
 
   return (
-    <NextLink href={`/product/${product.id}`}>
-      <Box className={styles.productCard} width={290} borderWidth="1px" borderRadius="lg" overflow="hidden">
-        <Image src={product.imageUrl} alt={product.imageAlt} />
+    <Box className={styles.productCard} maxW={'80em'} borderWidth="1px" borderRadius="lg" overflow="hidden">
+      <Box>
+        <Box className={styles.productMenuDropdown}>
+          <Menu>
+            <MenuButton
+              as={IconButton}
+              aria-label="Options"
+              isRound={true}
+              icon={<NextImage src="/menu_dropdown.png" width={4} height={16} className={styles.companyLogo} />}
+              variant="outline"
+              bg="white"
+            />
+            <MenuList>
+              <NextLink href={`/product/edit/${product.id}`}>
+                <MenuItem>Edit</MenuItem>
+              </NextLink>
+              <MenuItem>Delete</MenuItem>
+            </MenuList>
+          </Menu>
+        </Box>
+        <NextLink href={`/product/${product.id}`}>
+          <Image src={product.imageUrl} alt={product.imageAlt} />
+        </NextLink>
+      </Box>
 
-        <Box p="6">
+      <Box p="6">
+        <NextLink href={`/product/${product.id}`}>
           <Box mt="1" fontWeight="bold" as="h4" lineHeight="tight" isTruncated>
             {product.title}
           </Box>
+        </NextLink>
 
-          <Box mt="1" fontWeight={400}>
-            <Text>{product.description}</Text>
-          </Box>
+        <Box mt="1" fontWeight={400}>
+          <Text>{product.description}</Text>
+        </Box>
 
-          <Box d="flex" mt="2">
-            <NextLink href={`#`}>
-              <Button leftIcon={<Image src={'/cart.png'} />} bg="purple.50" color="purple.700" isFullWidth>
-                Add to cart
-              </Button>
-            </NextLink>
-          </Box>
+        <Box d="flex" mt="2">
+          <Button leftIcon={<Image src={'/cart.png'} />} bg="purple.50" color="purple.700" isFullWidth>
+            Add to cart
+          </Button>
         </Box>
       </Box>
-    </NextLink>
+    </Box>
   );
 };
 

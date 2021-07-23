@@ -21,7 +21,7 @@ const Navigation: FC = () => {
       </Box>
       <Spacer />
       <Box mr="24" p="2">
-        {hasLoggedIn ? (
+        {!hasLoggedIn ? (
           <>
             <NextLink href="/login">
               <Button variant="outline" mr="4">

@@ -1,3 +1,2 @@
-export const getAccessToken = (): string => localStorage.getItem('access_token') || '';
-
+export const getAccessToken = (): string => localStorage.getItem('token') || '';
 export const isLoggedIn = (): boolean => Boolean(getAccessToken());
