@@ -6,7 +6,7 @@ import React, { FC } from 'react';
 
 const ProductCard: FC = () => {
   const product = {
-    imageUrl: '/media_placeholder.jpg',
+    imageUrl: '/media_placeholder_2.png',
     imageAlt: 'Product image',
     title: 'React JS',
     description:
@@ -36,7 +36,7 @@ const ProductCard: FC = () => {
           </Menu>
         </Box>
         <NextLink href={`/product/${product.id}`}>
-          <Image src={product.imageUrl} alt={product.imageAlt} />
+          <Image src={product.imageUrl} alt={product.imageAlt} className={styles.cardImage} />
         </NextLink>
       </Box>
 
