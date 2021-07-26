@@ -4,6 +4,7 @@ import { isLoggedIn } from '@utils/helper/auth';
 import NextLink from 'next/link';
 import React, { FC, useEffect, useState } from 'react';
 import { BiDotsVerticalRounded } from 'react-icons/bi';
+import { MdShoppingCart } from 'react-icons/md';
 
 const ProductCard: FC = () => {
   const [hasLoggedIn, setHasLoggedIn] = useState<boolean>(false);
@@ -70,7 +71,7 @@ const ProductCard: FC = () => {
         </Box>
 
         <Box d="flex" mt="2">
-          <Button leftIcon={<Image src={'/cart.png'} />} bg="purple.50" color="purple.700" isFullWidth>
+          <Button leftIcon={<MdShoppingCart />} bg="purple.50" color="purple.700" isFullWidth>
             Add to cart
           </Button>
         </Box>

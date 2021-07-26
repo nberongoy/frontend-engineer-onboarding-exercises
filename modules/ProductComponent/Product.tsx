@@ -22,6 +22,7 @@ import { isLoggedIn } from '@utils/helper/auth';
 import NextLink from 'next/link';
 import React, { FC, useEffect, useState } from 'react';
 import { FaEdit } from 'react-icons/fa';
+import { MdShoppingCart } from 'react-icons/md';
 
 const Product: FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -89,7 +90,7 @@ const Product: FC = () => {
 
       <Box width={393} mt="5">
         <NextLink href={`#`}>
-          <Button leftIcon={<Image src={'/cart.png'} />} bg="purple.50" color="purple.700" isFullWidth>
+          <Button leftIcon={<MdShoppingCart />} bg="purple.50" color="purple.700" isFullWidth>
             Add to cart
           </Button>
         </NextLink>
