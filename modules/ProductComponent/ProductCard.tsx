@@ -1,9 +1,9 @@
 import { Box, Button, IconButton, Image, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react';
 import styles from '@styles/Product.module.css';
 import { isLoggedIn } from '@utils/helper/auth';
-import NextImage from 'next/image';
 import NextLink from 'next/link';
 import React, { FC, useEffect, useState } from 'react';
+import { BiDotsVerticalRounded } from 'react-icons/bi';
 
 const ProductCard: FC = () => {
   const [hasLoggedIn, setHasLoggedIn] = useState<boolean>(false);
@@ -38,7 +38,7 @@ const ProductCard: FC = () => {
                 as={IconButton}
                 aria-label="Options"
                 isRound={true}
-                icon={<NextImage src="/menu_dropdown.png" width={4} height={16} className={styles.companyLogo} />}
+                icon={<BiDotsVerticalRounded color="#374151" fontSize={20} />}
                 variant="outline"
                 bg="white"
               />
