@@ -12,7 +12,6 @@ import {
   LinkOverlay,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import Router from 'next/router';
 import React, { FC } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { loginForm } from './validation';
@@ -31,9 +30,9 @@ const Login: FC = () => {
     resolver: yupResolver(loginForm),
   });
 
-  const onLogin: SubmitHandler<ILoginFormData> = async () => {
+  const onLogin: SubmitHandler<ILoginFormData> = () => {
     localStorage.setItem('token', 'isLoggedIn');
-    await Router.push('/products');
+    window.location.href = '/products';
   };
 
   return (

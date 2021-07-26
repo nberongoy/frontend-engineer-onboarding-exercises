@@ -1,10 +1,17 @@
 import { Box, Button, IconButton, Image, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react';
 import styles from '@styles/Product.module.css';
+import { isLoggedIn } from '@utils/helper/auth';
 import NextImage from 'next/image';
 import NextLink from 'next/link';
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 
 const ProductCard: FC = () => {
+  const [hasLoggedIn, setHasLoggedIn] = useState<boolean>(false);
+
+  useEffect(() => {
+    setHasLoggedIn(isLoggedIn());
+  }, []);
+
   const product = {
     imageUrl: '/media_placeholder_2.png',
     imageAlt: 'Product image',
@@ -17,24 +24,28 @@ const ProductCard: FC = () => {
   return (
     <Box className={styles.productCard} maxW={'80em'} borderWidth="1px" borderRadius="lg" overflow="hidden">
       <Box>
-        <Box className={styles.productMenuDropdown}>
-          <Menu>
-            <MenuButton
-              as={IconButton}
-              aria-label="Options"
-              isRound={true}
-              icon={<NextImage src="/menu_dropdown.png" width={4} height={16} className={styles.companyLogo} />}
-              variant="outline"
-              bg="white"
-            />
-            <MenuList>
-              <NextLink href={`/product/edit/${product.id}`}>
-                <MenuItem>Edit</MenuItem>
-              </NextLink>
-              <MenuItem>Delete</MenuItem>
-            </MenuList>
-          </Menu>
-        </Box>
+        {hasLoggedIn ? (
+          <Box className={styles.productMenuDropdown}>
+            <Menu>
+              <MenuButton
+                as={IconButton}
+                aria-label="Options"
+                isRound={true}
+                icon={<NextImage src="/menu_dropdown.png" width={4} height={16} className={styles.companyLogo} />}
+                variant="outline"
+                bg="white"
+              />
+              <MenuList>
+                <NextLink href={`/product/edit/${product.id}`}>
+                  <MenuItem>Edit</MenuItem>
+                </NextLink>
+                <MenuItem>Delete</MenuItem>
+              </MenuList>
+            </Menu>
+          </Box>
+        ) : (
+          ''
+        )}
         <NextLink href={`/product/${product.id}`}>
           <Image src={product.imageUrl} alt={product.imageAlt} className={styles.cardImage} />
         </NextLink>

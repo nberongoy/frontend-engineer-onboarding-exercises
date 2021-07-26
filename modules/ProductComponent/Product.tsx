@@ -18,12 +18,18 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
+import { isLoggedIn } from '@utils/helper/auth';
 import NextLink from 'next/link';
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { FaEdit } from 'react-icons/fa';
 
 const Product: FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [hasLoggedIn, setHasLoggedIn] = useState<boolean>(false);
+
+  useEffect(() => {
+    setHasLoggedIn(isLoggedIn());
+  }, []);
 
   const product = {
     imageUrl: '/media_placeholder_2.png',
@@ -59,15 +65,22 @@ const Product: FC = () => {
           <Box ml="10">
             <Box d="flex">
               <Heading mb="5">{product.title}</Heading>
-              <Spacer />
-              <NextLink href={`/product/edit/${product.id}`}>
-                <Button mr="2" bg="gray.100" variant="ghost">
-                  <Icon as={FaEdit} />
-                </Button>
-              </NextLink>
-              <Button bg="gray.100" variant="ghost" onClick={onOpen}>
-                <DeleteIcon />
-              </Button>
+              {hasLoggedIn ? (
+                <>
+                  <Spacer />
+
+                  <NextLink href={`/product/edit/${product.id}`}>
+                    <Button mr="2" bg="gray.100" variant="ghost">
+                      <Icon as={FaEdit} />
+                    </Button>
+                  </NextLink>
+                  <Button bg="gray.100" variant="ghost" onClick={onOpen}>
+                    <DeleteIcon />
+                  </Button>
+                </>
+              ) : (
+                ''
+              )}
             </Box>
             <Text>{product.description}</Text>
           </Box>
