@@ -37,7 +37,7 @@ const Login: FC = () => {
 
   return (
     <Center>
-      <Box borderWidth="1px" mt="50" width={600}>
+      <Box borderWidth="1px" mt="50" width={600} bg="white">
         <Box pt="30" pb="5">
           <Center>
             <Heading>Log in</Heading>
