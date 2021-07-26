@@ -1,9 +1,10 @@
-import { Avatar, Box, Button, Flex, Image, Spacer, Wrap, WrapItem } from '@chakra-ui/react';
+import { Avatar, Box, Button, Flex, Spacer, Wrap, WrapItem } from '@chakra-ui/react';
 import styles from '@styles/Navigation.module.css';
 import { isLoggedIn } from '@utils/helper/auth';
 import NextImage from 'next/image';
 import NextLink from 'next/link';
 import React, { FC, useEffect, useState } from 'react';
+import { BiBell } from 'react-icons/bi';
 
 const Navigation: FC = () => {
   const [hasLoggedIn, setHasLoggedIn] = useState<boolean>(false);
@@ -36,7 +37,9 @@ const Navigation: FC = () => {
           ) : (
             <Wrap>
               <WrapItem>
-                <Image pt="3" mr="4" src={'/bell.png'} />
+                <Box pt="3" mr="4">
+                  <BiBell fontSize={24} color="#9CA3AF" />
+                </Box>
               </WrapItem>
               <WrapItem>
                 <Avatar name="Christian Nwamba" src="https://bit.ly/code-beast" />
