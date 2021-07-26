@@ -6,9 +6,9 @@ export const loginForm = yup.object().shape({
 });
 
 export const signupForm = yup.object().shape({
-  firstName: yup.string().required('Frist name is required.'),
-  lastName: yup.string().required('Last name is required.'),
-  email: yup.string().required('Email is required.').email('Please input an email.'),
+  firstname: yup.string().required('First name is required.'),
+  lastname: yup.string().required('Last name is required.'),
+  emailAddress: yup.string().required('Email is required.').email('Please input an email.'),
   password: yup.string().required('Password is required.'),
   confirmPassword: yup
     .string()

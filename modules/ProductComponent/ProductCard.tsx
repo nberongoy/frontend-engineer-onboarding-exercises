@@ -1,10 +1,18 @@
 import { Box, Button, IconButton, Image, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react';
 import styles from '@styles/Product.module.css';
-import NextImage from 'next/image';
+import { isLoggedIn } from '@utils/helper/auth';
 import NextLink from 'next/link';
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
+import { BiDotsVerticalRounded } from 'react-icons/bi';
+import { MdShoppingCart } from 'react-icons/md';
 
 const ProductCard: FC = () => {
+  const [hasLoggedIn, setHasLoggedIn] = useState<boolean>(false);
+
+  useEffect(() => {
+    setHasLoggedIn(isLoggedIn());
+  }, []);
+
   const product = {
     imageUrl: '/media_placeholder_2.png',
     imageAlt: 'Product image',
@@ -15,26 +23,37 @@ const ProductCard: FC = () => {
   };
 
   return (
-    <Box className={styles.productCard} maxW={'80em'} borderWidth="1px" borderRadius="lg" overflow="hidden">
+    <Box
+      className={styles.productCard}
+      maxW={'80em'}
+      borderWidth="1px"
+      borderRadius="lg"
+      overflow="hidden"
+      backgroundColor="white"
+    >
       <Box>
-        <Box className={styles.productMenuDropdown}>
-          <Menu>
-            <MenuButton
-              as={IconButton}
-              aria-label="Options"
-              isRound={true}
-              icon={<NextImage src="/menu_dropdown.png" width={4} height={16} className={styles.companyLogo} />}
-              variant="outline"
-              bg="white"
-            />
-            <MenuList>
-              <NextLink href={`/product/edit/${product.id}`}>
-                <MenuItem>Edit</MenuItem>
-              </NextLink>
-              <MenuItem>Delete</MenuItem>
-            </MenuList>
-          </Menu>
-        </Box>
+        {hasLoggedIn ? (
+          <Box className={styles.productMenuDropdown}>
+            <Menu>
+              <MenuButton
+                as={IconButton}
+                aria-label="Options"
+                isRound={true}
+                icon={<BiDotsVerticalRounded color="#374151" fontSize={20} />}
+                variant="outline"
+                bg="white"
+              />
+              <MenuList>
+                <NextLink href={`/product/edit/${product.id}`}>
+                  <MenuItem>Edit</MenuItem>
+                </NextLink>
+                <MenuItem>Delete</MenuItem>
+              </MenuList>
+            </Menu>
+          </Box>
+        ) : (
+          ''
+        )}
         <NextLink href={`/product/${product.id}`}>
           <Image src={product.imageUrl} alt={product.imageAlt} className={styles.cardImage} />
         </NextLink>
@@ -52,7 +71,7 @@ const ProductCard: FC = () => {
         </Box>
 
         <Box d="flex" mt="2">
-          <Button leftIcon={<Image src={'/cart.png'} />} bg="purple.50" color="purple.700" isFullWidth>
+          <Button leftIcon={<MdShoppingCart />} bg="purple.50" color="purple.700" isFullWidth>
             Add to cart
           </Button>
         </Box>
