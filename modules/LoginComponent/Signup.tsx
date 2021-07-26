@@ -14,6 +14,7 @@ import {
 import { yupResolver } from '@hookform/resolvers/yup';
 import styles from '@styles/Signup.module.css';
 import { SIGN_UP } from 'apollo/mutations/user';
+import Router from 'next/router';
 import React, { FC } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { signupForm } from './validation';
@@ -44,7 +45,7 @@ const SignUp: FC = () => {
       const { signUp } = data;
 
       localStorage.setItem('token', signUp.token);
-      window.location.href = '/products';
+      await Router.push('/products');
     } catch (error) {
       toast({
         title: error.message,

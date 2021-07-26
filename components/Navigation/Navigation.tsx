@@ -14,7 +14,7 @@ const Navigation: FC = () => {
 
   useEffect(() => {
     setHasLoggedIn(isLoggedIn());
-  }, []);
+  }, [router.pathname]);
 
   return (
     <Box backgroundColor="white" className={styles.navigationContainer}>

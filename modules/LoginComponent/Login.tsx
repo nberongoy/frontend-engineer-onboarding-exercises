@@ -1,3 +1,4 @@
+import { useMutation } from '@apollo/client';
 import {
   Box,
   Button,
@@ -10,14 +11,17 @@ import {
   Input,
   LinkBox,
   LinkOverlay,
+  useToast,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { AUTHENTICATE } from 'apollo/mutations/user';
+import Router from 'next/router';
 import React, { FC } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { loginForm } from './validation';
 
 interface ILoginFormData {
-  email: string;
+  emailAddress: string;
   password: string;
 }
 
@@ -30,9 +34,24 @@ const Login: FC = () => {
     resolver: yupResolver(loginForm),
   });
 
-  const onLogin: SubmitHandler<ILoginFormData> = () => {
-    localStorage.setItem('token', 'isLoggedIn');
-    window.location.href = '/products';
+  const toast = useToast();
+  const [authenticateUser] = useMutation(AUTHENTICATE);
+
+  const onLogin: SubmitHandler<ILoginFormData> = async (loginData) => {
+    try {
+      const { data } = await authenticateUser({ variables: { input: loginData } });
+      const { authenticate } = data;
+
+      localStorage.setItem('token', authenticate.token);
+      await Router.push('/products');
+    } catch (error) {
+      toast({
+        title: error.message,
+        status: 'error',
+        position: 'top',
+        isClosable: true,
+      });
+    }
   };
 
   return (
@@ -49,8 +68,8 @@ const Login: FC = () => {
           <form onSubmit={handleSubmit(onLogin)}>
             <FormControl mt="5" id="email">
               <FormLabel>Email </FormLabel>
-              <Input type="text" placeholder="email@example.com" {...register('email')} />
-              <FormHelperText color="red.500">{errors.email?.message}</FormHelperText>
+              <Input type="text" placeholder="email@example.com" {...register('emailAddress')} />
+              <FormHelperText color="red.500">{errors.emailAddress?.message}</FormHelperText>
             </FormControl>
 
             <FormControl mt="5" id="password">
