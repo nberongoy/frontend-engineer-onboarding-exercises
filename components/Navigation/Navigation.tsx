@@ -13,37 +13,39 @@ const Navigation: FC = () => {
   }, []);
 
   return (
-    <Flex p="2" backgroundColor="white" className={styles.navigationContainer}>
-      <Box ml="24" p="2">
-        <NextLink href="/">
-          <NextImage src="/Logo.png" width={143} height={32} className={styles.companyLogo} />
-        </NextLink>
-      </Box>
-      <Spacer />
-      <Box mr="24" p="2">
-        {!hasLoggedIn ? (
-          <>
-            <NextLink href="/login">
-              <Button variant="outline" mr="4">
-                Login
-              </Button>
-            </NextLink>
-            <NextLink href="/signup">
-              <Button colorScheme="purple">Sign up</Button>
-            </NextLink>
-          </>
-        ) : (
-          <Wrap>
-            <WrapItem>
-              <Image pt="3" mr="4" src={'/bell.png'} />
-            </WrapItem>
-            <WrapItem>
-              <Avatar name="Christian Nwamba" src="https://bit.ly/code-beast" />
-            </WrapItem>
-          </Wrap>
-        )}
-      </Box>
-    </Flex>
+    <Box p="2" backgroundColor="white" className={styles.navigationContainer}>
+      <Flex>
+        <Box ml="24" p="2">
+          <NextLink href="/">
+            <NextImage src="/Logo.png" width={143} height={32} className={styles.companyLogo} />
+          </NextLink>
+        </Box>
+        <Spacer />
+        <Box mr="24" p="2">
+          {!hasLoggedIn ? (
+            <>
+              <NextLink href="/login">
+                <Button variant="outline" mr="4">
+                  Login
+                </Button>
+              </NextLink>
+              <NextLink href="/signup">
+                <Button colorScheme="purple">Sign up</Button>
+              </NextLink>
+            </>
+          ) : (
+            <Wrap>
+              <WrapItem>
+                <Image pt="3" mr="4" src={'/bell.png'} />
+              </WrapItem>
+              <WrapItem>
+                <Avatar name="Christian Nwamba" src="https://bit.ly/code-beast" />
+              </WrapItem>
+            </Wrap>
+          )}
+        </Box>
+      </Flex>
+    </Box>
   );
 };
 

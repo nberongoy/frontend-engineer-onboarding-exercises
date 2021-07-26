@@ -22,7 +22,14 @@ const ProductCard: FC = () => {
   };
 
   return (
-    <Box className={styles.productCard} maxW={'80em'} borderWidth="1px" borderRadius="lg" overflow="hidden">
+    <Box
+      className={styles.productCard}
+      maxW={'80em'}
+      borderWidth="1px"
+      borderRadius="lg"
+      overflow="hidden"
+      backgroundColor="white"
+    >
       <Box>
         {hasLoggedIn ? (
           <Box className={styles.productMenuDropdown}>
