@@ -8,3 +8,7 @@
   top: 0;
   width: 100%;
 }
+
+.activeLink {
+  border-bottom: 2px solid #6366f1;
+}
