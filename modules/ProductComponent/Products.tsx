@@ -22,11 +22,13 @@ interface IProductEdge {
 }
 
 const Products: FC = ({}) => {
-  const { data } = useQuery(FETCH_PRODUCTS, { variables: { first: 9999 } });
-  const [hasLoggedIn, setHasLoggedIn] = useState<boolean>(false);
-  const [products, setProducts] = useState<IProductEdge[]>([]);
+  const { data } = useQuery(FETCH_PRODUCTS, { fetchPolicy: 'cache-and-network', variables: { first: 9999 } });
+
   const router = useRouter();
   const { pathname } = router;
+
+  const [hasLoggedIn, setHasLoggedIn] = useState<boolean>(false);
+  const [products, setProducts] = useState<IProductEdge[]>([]);
 
   useEffect(() => {
     setHasLoggedIn(isLoggedIn());
