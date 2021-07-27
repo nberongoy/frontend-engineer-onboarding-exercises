@@ -6,6 +6,10 @@ import React, { FC, useEffect, useState } from 'react';
 import ProductCard from './ProductCard';
 
 const Products: FC = () => {
+  // const { data, loading, error } = useQuery(FETCH_PRODUCTS, {
+  //   variables: {},
+  // });
+
   const [hasLoggedIn, setHasLoggedIn] = useState<boolean>(false);
 
   useEffect(() => {
