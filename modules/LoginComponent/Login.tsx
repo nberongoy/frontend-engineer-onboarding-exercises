@@ -74,7 +74,7 @@ const Login: FC = () => {
 
             <FormControl mt="5" id="password">
               <FormLabel>Password </FormLabel>
-              <Input type="pasword" placeholder="********" {...register('password')} />
+              <Input type="password" placeholder="********" {...register('password')} />
               <FormHelperText color="red.500">{errors.password?.message}</FormHelperText>
             </FormControl>
 
