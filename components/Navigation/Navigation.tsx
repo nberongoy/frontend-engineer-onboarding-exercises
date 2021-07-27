@@ -32,7 +32,7 @@ const Navigation: FC = () => {
           );
         })}
         <Spacer />
-        <Box mr="24" p="2">
+        <Box mr="24" p="3">
           {!hasLoggedIn ? (
             <>
               <NextLink href="/login">
