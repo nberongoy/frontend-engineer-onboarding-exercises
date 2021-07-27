@@ -14,7 +14,7 @@ const Navigation: FC = () => {
 
   useEffect(() => {
     setHasLoggedIn(isLoggedIn());
-  }, []);
+  }, [router.pathname]);
 
   return (
     <Box backgroundColor="white" className={styles.navigationContainer}>
@@ -32,7 +32,7 @@ const Navigation: FC = () => {
           );
         })}
         <Spacer />
-        <Box mr="24" p="2">
+        <Box mr="24" p="3">
           {!hasLoggedIn ? (
             <>
               <NextLink href="/login">

@@ -5,22 +5,32 @@ import NextLink from 'next/link';
 import React, { FC, useEffect, useState } from 'react';
 import { BiDotsVerticalRounded } from 'react-icons/bi';
 import { MdShoppingCart } from 'react-icons/md';
+import { IProduct } from './Products';
 
-const ProductCard: FC = () => {
+interface IProductCard {
+  product: IProduct;
+}
+const ProductCard: FC<IProductCard> = ({ product }) => {
   const [hasLoggedIn, setHasLoggedIn] = useState<boolean>(false);
+  const [productData, setProductData] = useState<IProduct>({
+    name: '',
+    id: '',
+    description: '',
+    imageAlt: '',
+    imageUrl: '',
+  });
 
   useEffect(() => {
     setHasLoggedIn(isLoggedIn());
   }, []);
 
-  const product = {
-    imageUrl: '/media_placeholder_2.png',
-    imageAlt: 'Product image',
-    title: 'React JS',
-    description:
-      'Repudiandae sint consequuntur vel. Amet ut nobis explicabo numquam expedita quia omnis voluptatem. Minus quidem ipsam quia iusto.',
-    id: 1,
-  };
+  useEffect(() => {
+    setProductData({
+      ...product,
+      imageUrl: '/media_placeholder_2.png',
+      imageAlt: 'Product image',
+    });
+  }, [product]);
 
   return (
     <Box
@@ -54,20 +64,20 @@ const ProductCard: FC = () => {
         ) : (
           ''
         )}
-        <NextLink href={`/product/${product.id}`}>
-          <Image src={product.imageUrl} alt={product.imageAlt} className={styles.cardImage} />
+        <NextLink href={`/product/${productData.id}`}>
+          <Image src={productData.imageUrl} alt={productData.imageAlt} className={styles.cardImage} />
         </NextLink>
       </Box>
 
       <Box p="6">
         <NextLink href={`/product/${product.id}`}>
           <Box mt="1" fontWeight="bold" as="h4" lineHeight="tight" isTruncated>
-            {product.title}
+            {productData.name}
           </Box>
         </NextLink>
 
         <Box mt="1" fontWeight={400}>
-          <Text>{product.description}</Text>
+          <Text>{productData.description}</Text>
         </Box>
 
         <Box d="flex" mt="2">

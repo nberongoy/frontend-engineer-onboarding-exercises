@@ -42,13 +42,15 @@ const Product: FC = () => {
   };
 
   return (
-    <Box p="110">
+    <Box p="110" pt="50">
       <Box mb="5">
         <Breadcrumb separator={<ChevronRightIcon color="gray.500" width={6} height={10} />}>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/products" color="gray.400" fontWeight={500}>
-              Products
-            </BreadcrumbLink>
+            <NextLink href="/products">
+              <Text color="gray.400" fontWeight={500} cursor="pointer">
+                Products
+              </Text>
+            </NextLink>
           </BreadcrumbItem>
 
           <BreadcrumbItem isCurrentPage>

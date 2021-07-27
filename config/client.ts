@@ -29,7 +29,9 @@ const requestLink = new ApolloLink(
         .catch(observer.error.bind(observer));
 
       return (): void => {
-        handle.unsubscribe();
+        try {
+          handle.unsubscribe();
+        } catch (error) {}
       };
     })
 );
@@ -46,7 +48,6 @@ const link = from([errorLink, requestLink, new HttpLink({ uri: 'http://localhost
 
 export const client = new ApolloClient({
   cache: new InMemoryCache(),
-
   link: link,
   credentials: 'same-origin',
 });

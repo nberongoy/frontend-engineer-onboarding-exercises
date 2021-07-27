@@ -1,3 +1,4 @@
+import { useMutation } from '@apollo/client';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import {
   Box,
@@ -11,19 +12,22 @@ import {
   Grid,
   GridItem,
   Input,
+  Text,
   Textarea,
   useToast,
 } from '@chakra-ui/react';
 import Upload from '@components/Upload';
 import { yupResolver } from '@hookform/resolvers/yup';
 import styles from '@styles/Product.module.css';
+import { CREATE_PRODUCT } from 'apollo/mutations/product';
+import NextLink from 'next/link';
 import Router from 'next/router';
 import React, { FC } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { productForm } from './validation';
 
 interface IProductFormData {
-  title: string;
+  name: string;
   description: string;
 }
 
@@ -37,15 +41,27 @@ const CreateProduct: FC = () => {
   });
 
   const toast = useToast();
+  const [createProduct] = useMutation(CREATE_PRODUCT);
 
-  const onSubmit: SubmitHandler<IProductFormData> = async () => {
-    toast({
-      title: `Successfully created a product!`,
-      status: 'success',
-      position: 'top-right',
-      isClosable: true,
-    });
-    await Router.push('/products');
+  const onSubmit: SubmitHandler<IProductFormData> = async (createData) => {
+    try {
+      await createProduct({ variables: { input: createData } });
+
+      toast({
+        title: `Successfully created a product!`,
+        status: 'success',
+        position: 'top-right',
+        isClosable: true,
+      });
+      await Router.push('/products');
+    } catch (error) {
+      toast({
+        title: error.message,
+        status: 'error',
+        position: 'top',
+        isClosable: true,
+      });
+    }
   };
 
   const onCancel = (): void => {
@@ -53,13 +69,15 @@ const CreateProduct: FC = () => {
   };
 
   return (
-    <Box p="110">
+    <Box p="110" pt="50">
       <Box mb="5">
         <Breadcrumb separator={<ChevronRightIcon color="gray.500" width={6} height={10} />}>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/products" color="gray.400" fontWeight={500}>
-              Products
-            </BreadcrumbLink>
+            <NextLink href="/products">
+              <Text color="gray.400" fontWeight={500} cursor="pointer">
+                Products
+              </Text>
+            </NextLink>
           </BreadcrumbItem>
 
           <BreadcrumbItem isCurrentPage>
@@ -81,10 +99,10 @@ const CreateProduct: FC = () => {
             </GridItem>
 
             <GridItem colSpan={4} b>
-              <FormControl id="type">
-                <FormLabel>Type </FormLabel>
-                <Input type="text" placeholder="Enter Title" {...register('title')} />
-                <FormHelperText color="red.500">{errors.title?.message}</FormHelperText>
+              <FormControl id="title">
+                <FormLabel>Title </FormLabel>
+                <Input type="text" placeholder="Enter Title" {...register('name')} />
+                <FormHelperText color="red.500">{errors.name?.message}</FormHelperText>
               </FormControl>
 
               <FormControl mt="5" id="description">
