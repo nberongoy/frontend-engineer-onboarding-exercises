@@ -22,7 +22,7 @@ export interface IProductEdge {
 }
 
 const Products: FC = ({}) => {
-  const { data } = useQuery(FETCH_PRODUCTS, { fetchPolicy: 'cache-and-network', variables: { first: 9999 } });
+  const { data } = useQuery(FETCH_PRODUCTS, { variables: { first: 9999 } });
   const router = useRouter();
   const { pathname } = router;
 

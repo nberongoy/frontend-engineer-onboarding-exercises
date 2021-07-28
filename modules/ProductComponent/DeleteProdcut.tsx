@@ -42,6 +42,7 @@ const ProductDeleteModal: FC<IDeleteProductsProps> = ({ isOpen, onClose, product
         position: 'top',
         isClosable: true,
       });
+      onClose();
     }
   };
   return (

@@ -36,7 +36,6 @@ const UpdateProduct: FC = () => {
   const router = useRouter();
   const { id } = router.query;
   const { data } = useQuery(FETCH_PRODUCTS, {
-    fetchPolicy: 'cache-and-network',
     variables: { first: 1, filter: { id: { eq: id } } },
   });
 
