@@ -1,3 +1,4 @@
+import { useQuery } from '@apollo/client';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import {
   Box,
@@ -18,10 +19,12 @@ import {
 import Upload from '@components/Upload';
 import { yupResolver } from '@hookform/resolvers/yup';
 import styles from '@styles/Product.module.css';
+import { FETCH_PRODUCTS } from 'apollo/queries/products';
 import NextLink from 'next/link';
-import Router from 'next/router';
-import React, { FC } from 'react';
+import Router, { useRouter } from 'next/router';
+import React, { FC, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { IProduct } from './Products';
 import { productForm } from './validation';
 
 interface IProductFormData {
@@ -30,6 +33,13 @@ interface IProductFormData {
 }
 
 const UpdateProduct: FC = () => {
+  const router = useRouter();
+  const { id } = router.query;
+  const { data } = useQuery(FETCH_PRODUCTS, {
+    fetchPolicy: 'cache-and-network',
+    variables: { first: 1, filter: { id: { eq: id } } },
+  });
+
   const {
     register,
     handleSubmit,
@@ -37,6 +47,19 @@ const UpdateProduct: FC = () => {
   } = useForm<IProductFormData>({
     resolver: yupResolver(productForm),
   });
+
+  const [product, setProduct] = useState<IProduct>({
+    name: '',
+    id: '',
+    description: '',
+  });
+
+  useEffect(() => {
+    if (data)
+      setProduct({
+        ...data.products.edges[0].node,
+      });
+  }, [data]);
 
   const toast = useToast();
 
@@ -86,14 +109,20 @@ const UpdateProduct: FC = () => {
 
             <GridItem colSpan={4}>
               <FormControl id="type">
-                <FormLabel>Type </FormLabel>
-                <Input type="text" placeholder="Enter Title" {...register('title')} />
+                <FormLabel>Title </FormLabel>
+                <Input type="text" placeholder="Enter Title" {...register('title')} defaultValue={product.name} />
                 <FormHelperText color="red.500">{errors.title?.message}</FormHelperText>
               </FormControl>
 
               <FormControl mt="5" id="description">
                 <FormLabel>Description </FormLabel>
-                <Textarea rows={2} type="text" placeholder="Enter Description" {...register('description')} />
+                <Textarea
+                  rows={2}
+                  type="text"
+                  placeholder="Enter Description"
+                  {...register('description')}
+                  defaultValue={product.description}
+                />
                 <FormHelperText color="red.500">{errors.description?.message}</FormHelperText>
               </FormControl>
 

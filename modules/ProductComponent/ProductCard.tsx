@@ -65,7 +65,9 @@ const ProductCard: FC<IProductCard> = ({ product }) => {
           ''
         )}
         <NextLink href={`/product/${productData.id}`}>
-          <Image src={productData.imageUrl} alt={productData.imageAlt} className={styles.cardImage} />
+          <div>
+            <Image src={productData.imageUrl} alt={productData.imageAlt} className={styles.cardImage} />
+          </div>
         </NextLink>
       </Box>
 

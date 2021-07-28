@@ -1,3 +1,4 @@
+import { useQuery } from '@apollo/client';
 import { ChevronRightIcon, DeleteIcon, Icon } from '@chakra-ui/icons';
 import {
   Box,
@@ -19,27 +20,40 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { isLoggedIn } from '@utils/helper/auth';
+import { FETCH_PRODUCTS } from 'apollo/queries/products';
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
 import React, { FC, useEffect, useState } from 'react';
 import { FaEdit } from 'react-icons/fa';
 import { MdShoppingCart } from 'react-icons/md';
+import { IProduct } from './Products';
 
 const Product: FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const router = useRouter();
+  const { id } = router.query;
+  const { data } = useQuery(FETCH_PRODUCTS, {
+    fetchPolicy: 'cache-and-network',
+    variables: { first: 1, filter: { id: { eq: id } } },
+  });
+
   const [hasLoggedIn, setHasLoggedIn] = useState<boolean>(false);
+  const [product, setProduct] = useState<IProduct>({
+    name: '',
+    description: '',
+    id: '',
+    imageUrl: '/media_placeholder_2.png',
+    imageAlt: 'Product image',
+  });
 
   useEffect(() => {
     setHasLoggedIn(isLoggedIn());
-  }, []);
-
-  const product = {
-    imageUrl: '/media_placeholder_2.png',
-    imageAlt: 'Product image',
-    title: 'React JS',
-    description:
-      'Repudiandae sint consequuntur vel. Amet ut nobis explicabo numquam expedita quia omnis voluptatem. Minus quidem ipsam quia iusto. Repudiandae sint consequuntur vel. Amet ut nobis explicabo numquam expedita quia omnis voluptatem. Minus quidem ipsam quia iusto.Repudiandae sint consequuntur vel. Amet ut nobis explicabo numquam expedita quia omnis voluptatem. Minus quidem ipsam quia iusto.Repudiandae sint consequuntur vel. Amet ut nobis explicabo numquam expedita quia omnis voluptatem. Minus quidem ipsam quia iusto.Repudiandae sint consequuntur vel. Amet ut nobis explicabo numquam expedita quia omnis voluptatem. Minus quidem ipsam quia iusto.',
-    id: 1,
-  };
+    if (data)
+      setProduct({
+        ...product,
+        ...data.products.edges[0].node,
+      });
+  }, [data, product]);
 
   return (
     <Box p="110" pt="50">
@@ -55,7 +69,7 @@ const Product: FC = () => {
 
           <BreadcrumbItem isCurrentPage>
             <BreadcrumbLink href="#" color="gray.400" fontWeight={500}>
-              {product.title}
+              {product.name}
             </BreadcrumbLink>
           </BreadcrumbItem>
         </Breadcrumb>
@@ -67,7 +81,7 @@ const Product: FC = () => {
 
           <Box ml="10">
             <Box d="flex">
-              <Heading mb="5">{product.title}</Heading>
+              <Heading mb="5">{product.name}</Heading>
               {hasLoggedIn ? (
                 <>
                   <Spacer />
