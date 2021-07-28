@@ -9,10 +9,10 @@ import {
   Flex,
   Heading,
   Image,
-  Spacer,
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
+import styles from '@styles/Product.module.css';
 import { isLoggedIn } from '@utils/helper/auth';
 import { FETCH_PRODUCTS } from 'apollo/queries/products';
 import NextLink from 'next/link';
@@ -74,12 +74,11 @@ const Product: FC = () => {
           <Image src={product.imageUrl} alt={product.imageAlt} />
 
           <Box ml="10">
-            <Box d="flex">
-              <Heading mb="5">{product.name}</Heading>
-              {hasLoggedIn ? (
-                <>
-                  <Spacer />
+            <Flex mb="5">
+              <Heading>{product.name}</Heading>
 
+              {hasLoggedIn ? (
+                <div className={styles.productViewButton}>
                   <NextLink href={`/product/edit/${product.id}`}>
                     <Button mr="2" bg="gray.100" variant="ghost">
                       <Icon as={FaEdit} />
@@ -88,11 +87,11 @@ const Product: FC = () => {
                   <Button bg="gray.100" variant="ghost" onClick={onOpen}>
                     <DeleteIcon />
                   </Button>
-                </>
+                </div>
               ) : (
                 ''
               )}
-            </Box>
+            </Flex>
             <Text>{product.description}</Text>
           </Box>
         </Flex>
