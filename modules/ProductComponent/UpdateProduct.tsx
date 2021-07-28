@@ -1,3 +1,4 @@
+import { useMutation } from '@apollo/client';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import {
   Box,
@@ -17,37 +18,70 @@ import {
 } from '@chakra-ui/react';
 import Upload from '@components/Upload';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { RootState } from '@store/store';
 import styles from '@styles/Product.module.css';
+import { UPDATE_PRODUCT } from 'apollo/mutations/product';
 import NextLink from 'next/link';
 import Router from 'next/router';
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 import { productForm } from './validation';
 
 interface IProductFormData {
-  title: string;
+  name: string;
   description: string;
 }
 
 const UpdateProduct: FC = () => {
+  // filter query working correctly
+  // const router = useRouter();
+  // const { id } = router.query;
+  // const { data } = useQuery(FETCH_PRODUCTS, {
+  //   variables: { first: 1, filter: { id: { eq: id } } },
+  // });
+
+  const productState = useSelector((state: RootState) => state.product.selectedProduct);
+  const [productId, setProductId] = useState<string | undefined>('');
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<IProductFormData>({
     resolver: yupResolver(productForm),
   });
 
-  const toast = useToast();
+  useEffect(() => {
+    setValue('name', productState.name, { shouldDirty: true });
+    setValue('description', productState.description, { shouldDirty: true });
+    setProductId(productState.id);
+  }, [setValue, productState]);
 
-  const onSubmit: SubmitHandler<IProductFormData> = async () => {
-    toast({
-      title: `Successfully updated a product!`,
-      status: 'success',
-      position: 'top-right',
-      isClosable: true,
-    });
-    await Router.push('/products');
+  const toast = useToast();
+  const [updateProduct] = useMutation(UPDATE_PRODUCT);
+
+  const onSubmit: SubmitHandler<IProductFormData> = async (updateData) => {
+    try {
+      await updateProduct({ variables: { input: { id: productId, body: { ...updateData } } } });
+
+      toast({
+        title: `Successfully updated a product!`,
+        status: 'success',
+        position: 'top-right',
+        isClosable: true,
+      });
+
+      await Router.push('/products');
+    } catch (error) {
+      toast({
+        title: error.message,
+        status: 'error',
+        position: 'top',
+        isClosable: true,
+      });
+    }
   };
 
   const onCancel = (): void => {
@@ -86,9 +120,9 @@ const UpdateProduct: FC = () => {
 
             <GridItem colSpan={4}>
               <FormControl id="type">
-                <FormLabel>Type </FormLabel>
-                <Input type="text" placeholder="Enter Title" {...register('title')} />
-                <FormHelperText color="red.500">{errors.title?.message}</FormHelperText>
+                <FormLabel>Title </FormLabel>
+                <Input type="text" placeholder="Enter Title" {...register('name')} />
+                <FormHelperText color="red.500">{errors.name?.message}</FormHelperText>
               </FormControl>
 
               <FormControl mt="5" id="description">

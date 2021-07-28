@@ -16,14 +16,13 @@ export interface IProduct {
   imageAlt?: string;
 }
 
-interface IProductEdge {
+export interface IProductEdge {
   cursor: string;
   node: IProduct;
 }
 
 const Products: FC = ({}) => {
   const { data } = useQuery(FETCH_PRODUCTS, { fetchPolicy: 'cache-and-network', variables: { first: 9999 } });
-
   const router = useRouter();
   const { pathname } = router;
 
@@ -35,7 +34,9 @@ const Products: FC = ({}) => {
   }, [pathname]);
 
   useEffect(() => {
-    if (data) setProducts(data.products.edges);
+    if (data) {
+      setProducts(data.products.edges);
+    }
   }, [data]);
 
   return (

@@ -8,38 +8,43 @@ import {
   Flex,
   Heading,
   Image,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Spacer,
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
+import { RootState } from '@store/store';
+import styles from '@styles/Product.module.css';
 import { isLoggedIn } from '@utils/helper/auth';
 import NextLink from 'next/link';
 import React, { FC, useEffect, useState } from 'react';
 import { FaEdit } from 'react-icons/fa';
 import { MdShoppingCart } from 'react-icons/md';
+import { useSelector } from 'react-redux';
+import ProductDeleteModal from './DeleteProdcut';
+import { IProduct } from './Products';
 
 const Product: FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  // filter api not return correctly
+
+  // const router = useRouter();
+  // const { id } = router.query;
+  // filter api not return correctly
+  // const variablesQuery = { variables: { filter: { id: { eq: id } } } };
+  // const { data } = useQuery(FETCH_PRODUCTS, variablesQuery);
+
+  const productState = useSelector((state: RootState) => state.product.selectedProduct);
+
   const [hasLoggedIn, setHasLoggedIn] = useState<boolean>(false);
+  const product = {
+    ...productState,
+    imageUrl: '/media_placeholder_2.png',
+    imageAlt: 'Product image',
+  } as IProduct;
 
   useEffect(() => {
     setHasLoggedIn(isLoggedIn());
   }, []);
-
-  const product = {
-    imageUrl: '/media_placeholder_2.png',
-    imageAlt: 'Product image',
-    title: 'React JS',
-    description:
-      'Repudiandae sint consequuntur vel. Amet ut nobis explicabo numquam expedita quia omnis voluptatem. Minus quidem ipsam quia iusto. Repudiandae sint consequuntur vel. Amet ut nobis explicabo numquam expedita quia omnis voluptatem. Minus quidem ipsam quia iusto.Repudiandae sint consequuntur vel. Amet ut nobis explicabo numquam expedita quia omnis voluptatem. Minus quidem ipsam quia iusto.Repudiandae sint consequuntur vel. Amet ut nobis explicabo numquam expedita quia omnis voluptatem. Minus quidem ipsam quia iusto.Repudiandae sint consequuntur vel. Amet ut nobis explicabo numquam expedita quia omnis voluptatem. Minus quidem ipsam quia iusto.',
-    id: 1,
-  };
 
   return (
     <Box p="110" pt="50">
@@ -55,7 +60,7 @@ const Product: FC = () => {
 
           <BreadcrumbItem isCurrentPage>
             <BreadcrumbLink href="#" color="gray.400" fontWeight={500}>
-              {product.title}
+              {product.name}
             </BreadcrumbLink>
           </BreadcrumbItem>
         </Breadcrumb>
@@ -66,12 +71,11 @@ const Product: FC = () => {
           <Image src={product.imageUrl} alt={product.imageAlt} />
 
           <Box ml="10">
-            <Box d="flex">
-              <Heading mb="5">{product.title}</Heading>
-              {hasLoggedIn ? (
-                <>
-                  <Spacer />
+            <Flex mb="5">
+              <Heading>{product.name}</Heading>
 
+              {hasLoggedIn ? (
+                <div className={styles.productViewButton}>
                   <NextLink href={`/product/edit/${product.id}`}>
                     <Button mr="2" bg="gray.100" variant="ghost">
                       <Icon as={FaEdit} />
@@ -80,11 +84,11 @@ const Product: FC = () => {
                   <Button bg="gray.100" variant="ghost" onClick={onOpen}>
                     <DeleteIcon />
                   </Button>
-                </>
+                </div>
               ) : (
                 ''
               )}
-            </Box>
+            </Flex>
             <Text>{product.description}</Text>
           </Box>
         </Flex>
@@ -98,24 +102,7 @@ const Product: FC = () => {
         </NextLink>
       </Box>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Delete Product</ModalHeader>
-          <ModalBody>
-            <Text>Are you sure you want to delete this product? You can’t undo this action afterwards.</Text>
-          </ModalBody>
-
-          <ModalFooter>
-            <Button colorScheme="gray" variant="ghost" mr={3} onClick={onClose}>
-              Cancel
-            </Button>
-            <Button colorScheme="red" onClick={onClose}>
-              Delete
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <ProductDeleteModal isOpen={isOpen} onClose={onClose} productId={product.id || ''} />
     </Box>
   );
 };

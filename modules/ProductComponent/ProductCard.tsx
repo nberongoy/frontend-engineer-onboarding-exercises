@@ -1,10 +1,12 @@
 import { Box, Button, IconButton, Image, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react';
+import { setSelectedProduct } from '@store/slice/productSlice';
 import styles from '@styles/Product.module.css';
 import { isLoggedIn } from '@utils/helper/auth';
 import NextLink from 'next/link';
 import React, { FC, useEffect, useState } from 'react';
 import { BiDotsVerticalRounded } from 'react-icons/bi';
 import { MdShoppingCart } from 'react-icons/md';
+import { useDispatch } from 'react-redux';
 import { IProduct } from './Products';
 
 interface IProductCard {
@@ -12,25 +14,17 @@ interface IProductCard {
 }
 const ProductCard: FC<IProductCard> = ({ product }) => {
   const [hasLoggedIn, setHasLoggedIn] = useState<boolean>(false);
-  const [productData, setProductData] = useState<IProduct>({
-    name: '',
-    id: '',
-    description: '',
-    imageAlt: '',
-    imageUrl: '',
-  });
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setHasLoggedIn(isLoggedIn());
   }, []);
 
-  useEffect(() => {
-    setProductData({
-      ...product,
-      imageUrl: '/media_placeholder_2.png',
-      imageAlt: 'Product image',
-    });
-  }, [product]);
+  product = {
+    ...product,
+    imageUrl: '/media_placeholder_2.png',
+    imageAlt: 'Product image',
+  };
 
   return (
     <Box
@@ -55,7 +49,13 @@ const ProductCard: FC<IProductCard> = ({ product }) => {
               />
               <MenuList>
                 <NextLink href={`/product/edit/${product.id}`}>
-                  <MenuItem>Edit</MenuItem>
+                  <MenuItem
+                    onClick={(): void => {
+                      dispatch(setSelectedProduct(product));
+                    }}
+                  >
+                    Edit
+                  </MenuItem>
                 </NextLink>
                 <MenuItem>Delete</MenuItem>
               </MenuList>
@@ -64,20 +64,35 @@ const ProductCard: FC<IProductCard> = ({ product }) => {
         ) : (
           ''
         )}
-        <NextLink href={`/product/${productData.id}`}>
-          <Image src={productData.imageUrl} alt={productData.imageAlt} className={styles.cardImage} />
+        <NextLink href={`/product/${product.id}`}>
+          <div
+            onClick={(): void => {
+              dispatch(setSelectedProduct(product));
+            }}
+          >
+            <Image src={product.imageUrl} alt={product.imageAlt} className={styles.cardImage} />
+          </div>
         </NextLink>
       </Box>
 
       <Box p="6">
         <NextLink href={`/product/${product.id}`}>
-          <Box mt="1" fontWeight="bold" as="h4" lineHeight="tight" isTruncated>
-            {productData.name}
+          <Box
+            mt="1"
+            fontWeight="bold"
+            as="h4"
+            lineHeight="tight"
+            onClick={(): void => {
+              dispatch(setSelectedProduct(product));
+            }}
+            isTruncated
+          >
+            {product.name}
           </Box>
         </NextLink>
 
         <Box mt="1" fontWeight={400}>
-          <Text>{productData.description}</Text>
+          <Text>{product.description}</Text>
         </Box>
 
         <Box d="flex" mt="2">

@@ -14,3 +14,24 @@ export const CREATE_PRODUCT = gql`
     }
   }
 `;
+
+export const UPDATE_PRODUCT = gql`
+  mutation UpdateProduct($input: UpdateProductInput!) {
+    updateProduct(input: $input) {
+      id
+      name
+      description
+      owner {
+        id
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const DELETE_PRODUCT = gql`
+  mutation DeleteProduct($input: DeleteProductInput!) {
+    deleteProduct(input: $input)
+  }
+`;
