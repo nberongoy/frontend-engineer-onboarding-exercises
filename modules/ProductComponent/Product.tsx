@@ -9,12 +9,6 @@ import {
   Flex,
   Heading,
   Image,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   Spacer,
   Text,
   useDisclosure,
@@ -26,6 +20,7 @@ import { useRouter } from 'next/router';
 import React, { FC, useEffect, useState } from 'react';
 import { FaEdit } from 'react-icons/fa';
 import { MdShoppingCart } from 'react-icons/md';
+import ProductDeleteModal from './DeleteProdcut';
 import { IProduct } from './Products';
 
 const Product: FC = () => {
@@ -112,24 +107,7 @@ const Product: FC = () => {
         </NextLink>
       </Box>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Delete Product</ModalHeader>
-          <ModalBody>
-            <Text>Are you sure you want to delete this product? You can’t undo this action afterwards.</Text>
-          </ModalBody>
-
-          <ModalFooter>
-            <Button colorScheme="gray" variant="ghost" mr={3} onClick={onClose}>
-              Cancel
-            </Button>
-            <Button colorScheme="red" onClick={onClose}>
-              Delete
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <ProductDeleteModal isOpen={isOpen} onClose={onClose} productId={product.id || ''} />
     </Box>
   );
 };
