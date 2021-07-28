@@ -36,16 +36,14 @@ const Product: FC = () => {
   const productState = useSelector((state: RootState) => state.product.selectedProduct);
 
   const [hasLoggedIn, setHasLoggedIn] = useState<boolean>(false);
-  const [product, setProduct] = useState<IProduct>({
-    name: '',
-    description: '',
+  const product = {
+    ...productState,
     imageUrl: '/media_placeholder_2.png',
     imageAlt: 'Product image',
-  });
+  } as IProduct;
 
   useEffect(() => {
     setHasLoggedIn(isLoggedIn());
-    setProduct({ ...product, ...productState });
   }, []);
 
   return (
