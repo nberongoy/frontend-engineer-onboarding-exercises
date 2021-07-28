@@ -45,12 +45,8 @@ const Product: FC = () => {
 
   useEffect(() => {
     setHasLoggedIn(isLoggedIn());
-  }, []);
-
-  useEffect(() => {
-    setHasLoggedIn(isLoggedIn());
     setProduct({ ...product, ...productState });
-  }, [productState, product]);
+  }, []);
 
   return (
     <Box p="110" pt="50">

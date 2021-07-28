@@ -45,6 +45,7 @@ const ProductDeleteModal: FC<IDeleteProductsProps> = ({ isOpen, onClose, product
       onClose();
     }
   };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
