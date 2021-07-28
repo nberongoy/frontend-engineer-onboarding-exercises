@@ -25,7 +25,6 @@ import NextLink from 'next/link';
 import Router, { useRouter } from 'next/router';
 import React, { FC, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { IProduct } from './Products';
 import { productForm } from './validation';
 
 interface IProductFormData {
@@ -44,29 +43,28 @@ const UpdateProduct: FC = () => {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<IProductFormData>({
     resolver: yupResolver(productForm),
   });
 
-  const [product, setProduct] = useState<IProduct>({
-    name: '',
-    id: '',
-    description: '',
-  });
+  const [productId, setProductId] = useState();
 
   useEffect(() => {
-    if (data)
-      setProduct({
-        ...data.products.edges[0].node,
-      });
-  }, [data]);
+    if (data) {
+      const { id, name, description } = data.products.edges[0].node;
+      setValue('name', name, { shouldDirty: true });
+      setValue('description', description, { shouldDirty: true });
+      setProductId(id);
+    }
+  }, [data, setValue]);
 
   const toast = useToast();
   const [updateProduct] = useMutation(UPDATE_PRODUCT);
 
   const onSubmit: SubmitHandler<IProductFormData> = async (updateData) => {
     try {
-      await updateProduct({ variables: { input: { id: product.id, body: { ...updateData } } } });
+      await updateProduct({ variables: { input: { id: productId, body: { ...updateData } } } });
 
       toast({
         title: `Successfully updated a product!`,
@@ -121,19 +119,13 @@ const UpdateProduct: FC = () => {
             <GridItem colSpan={4}>
               <FormControl id="type">
                 <FormLabel>Title </FormLabel>
-                <Input type="text" placeholder="Enter Title" {...register('name')} defaultValue={product.name} />
+                <Input type="text" placeholder="Enter Title" {...register('name')} />
                 <FormHelperText color="red.500">{errors.name?.message}</FormHelperText>
               </FormControl>
 
               <FormControl mt="5" id="description">
                 <FormLabel>Description </FormLabel>
-                <Textarea
-                  rows={2}
-                  type="text"
-                  placeholder="Enter Description"
-                  {...register('description')}
-                  defaultValue={product.description}
-                />
+                <Textarea rows={2} type="text" placeholder="Enter Description" {...register('description')} />
                 <FormHelperText color="red.500">{errors.description?.message}</FormHelperText>
               </FormControl>
 
