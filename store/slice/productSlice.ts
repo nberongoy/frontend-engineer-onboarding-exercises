@@ -3,12 +3,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface ProductState {
   productList: IProductEdge[];
-  selectedProduct: IProduct | null;
+  selectedProduct: IProduct;
 }
 
 const initialState: ProductState = {
   productList: [],
-  selectedProduct: null,
+  selectedProduct: { id: '', name: '', description: '' },
 };
 
 export const productSlice = createSlice({
@@ -18,12 +18,12 @@ export const productSlice = createSlice({
     setProductList: (state, action: PayloadAction<IProductEdge[]>) => {
       state.productList = action.payload;
     },
-    setSelectedProdcut: (state, action: PayloadAction<IProduct>) => {
+    setSelectedProduct: (state, action: PayloadAction<IProduct>) => {
       state.selectedProduct = action.payload;
     },
   },
 });
 
-export const { setProductList, setSelectedProdcut } = productSlice.actions;
+export const { setProductList, setSelectedProduct } = productSlice.actions;
 
 export default productSlice.reducer;

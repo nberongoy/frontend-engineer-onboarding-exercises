@@ -1,4 +1,3 @@
-import { useQuery } from '@apollo/client';
 import { ChevronRightIcon, DeleteIcon, Icon } from '@chakra-ui/icons';
 import {
   Box,
@@ -12,42 +11,46 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
+import { RootState } from '@store/store';
 import styles from '@styles/Product.module.css';
 import { isLoggedIn } from '@utils/helper/auth';
-import { FETCH_PRODUCTS } from 'apollo/queries/products';
 import NextLink from 'next/link';
-import { useRouter } from 'next/router';
 import React, { FC, useEffect, useState } from 'react';
 import { FaEdit } from 'react-icons/fa';
 import { MdShoppingCart } from 'react-icons/md';
+import { useSelector } from 'react-redux';
 import ProductDeleteModal from './DeleteProdcut';
 import { IProduct } from './Products';
 
 const Product: FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const router = useRouter();
-  const { id } = router.query;
-  const { data } = useQuery(FETCH_PRODUCTS, {
-    variables: { first: 1, filter: { id: { eq: id } } },
-  });
+
+  // filter api not return correctly
+
+  // const router = useRouter();
+  // const { id } = router.query;
+  // filter api not return correctly
+  // const variablesQuery = { variables: { filter: { id: { eq: id } } } };
+  // const { data } = useQuery(FETCH_PRODUCTS, variablesQuery);
+
+  const productState = useSelector((state: RootState) => state.product.selectedProduct);
 
   const [hasLoggedIn, setHasLoggedIn] = useState<boolean>(false);
   const [product, setProduct] = useState<IProduct>({
     name: '',
     description: '',
-    id: '',
     imageUrl: '/media_placeholder_2.png',
     imageAlt: 'Product image',
   });
 
   useEffect(() => {
     setHasLoggedIn(isLoggedIn());
-    if (data)
-      setProduct({
-        ...product,
-        ...data.products.edges[0].node,
-      });
-  }, [data, product]);
+  }, []);
+
+  useEffect(() => {
+    setHasLoggedIn(isLoggedIn());
+    setProduct({ ...product, ...productState });
+  }, [productState, product]);
 
   return (
     <Box p="110" pt="50">
