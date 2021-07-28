@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import {
   Box,
@@ -19,6 +19,7 @@ import {
 import Upload from '@components/Upload';
 import { yupResolver } from '@hookform/resolvers/yup';
 import styles from '@styles/Product.module.css';
+import { UPDATE_PRODUCT } from 'apollo/mutations/product';
 import { FETCH_PRODUCTS } from 'apollo/queries/products';
 import NextLink from 'next/link';
 import Router, { useRouter } from 'next/router';
@@ -28,7 +29,7 @@ import { IProduct } from './Products';
 import { productForm } from './validation';
 
 interface IProductFormData {
-  title: string;
+  name: string;
   description: string;
 }
 
@@ -61,15 +62,26 @@ const UpdateProduct: FC = () => {
   }, [data]);
 
   const toast = useToast();
+  const [updateProduct] = useMutation(UPDATE_PRODUCT);
 
-  const onSubmit: SubmitHandler<IProductFormData> = async () => {
-    toast({
-      title: `Successfully updated a product!`,
-      status: 'success',
-      position: 'top-right',
-      isClosable: true,
-    });
-    await Router.push('/products');
+  const onSubmit: SubmitHandler<IProductFormData> = async (updateData) => {
+    try {
+      await updateProduct({ variables: { input: { id: product.id, body: { ...updateData } } } });
+
+      toast({
+        title: `Successfully updated a product!`,
+        status: 'success',
+        position: 'top-right',
+        isClosable: true,
+      });
+    } catch (error) {
+      toast({
+        title: error.message,
+        status: 'error',
+        position: 'top',
+        isClosable: true,
+      });
+    }
   };
 
   const onCancel = (): void => {
@@ -109,8 +121,8 @@ const UpdateProduct: FC = () => {
             <GridItem colSpan={4}>
               <FormControl id="type">
                 <FormLabel>Title </FormLabel>
-                <Input type="text" placeholder="Enter Title" {...register('title')} defaultValue={product.name} />
-                <FormHelperText color="red.500">{errors.title?.message}</FormHelperText>
+                <Input type="text" placeholder="Enter Title" {...register('name')} defaultValue={product.name} />
+                <FormHelperText color="red.500">{errors.name?.message}</FormHelperText>
               </FormControl>
 
               <FormControl mt="5" id="description">
