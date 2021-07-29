@@ -25,7 +25,7 @@ const ProductDeleteModal: React.FC<IDeleteProductsProps> = ({ isOpen, onClose, p
 
   const toast = useToast();
 
-  const onDelete = async (): Promise<any> => {
+  const onDelete = async () => {
     try {
       await deleteProduct({ variables: { input: { id: productId } } });
       toast({
