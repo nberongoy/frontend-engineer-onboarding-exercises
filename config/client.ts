@@ -3,7 +3,7 @@ import { onError } from '@apollo/client/link/error';
 import { appConsole } from '@utils/consoleUtils';
 import { getAccessToken, isLoggedIn } from '@utils/helper/auth';
 
-const request = (operation: Operation): void => {
+const request = (operation: Operation) => {
   operation.setContext({
     ...(isLoggedIn() && {
       headers: {
@@ -28,7 +28,7 @@ const requestLink = new ApolloLink(
         })
         .catch(observer.error.bind(observer));
 
-      return (): void => {
+      return () => {
         try {
           handle.unsubscribe();
         } catch (error) {}

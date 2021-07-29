@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import { DELETE_PRODUCT } from 'apollo/mutations/product';
 import Router from 'next/router';
-import React, { FC } from 'react';
+import React from 'react';
 
 interface IDeleteProductsProps {
   isOpen: boolean;
@@ -20,12 +20,12 @@ interface IDeleteProductsProps {
   productId: string;
 }
 
-const ProductDeleteModal: FC<IDeleteProductsProps> = ({ isOpen, onClose, productId }) => {
+const ProductDeleteModal: React.FC<IDeleteProductsProps> = ({ isOpen, onClose, productId }) => {
   const [deleteProduct] = useMutation(DELETE_PRODUCT);
 
   const toast = useToast();
 
-  const onDelete = async (): Promise<any> => {
+  const onDelete = async () => {
     try {
       await deleteProduct({ variables: { input: { id: productId } } });
       toast({

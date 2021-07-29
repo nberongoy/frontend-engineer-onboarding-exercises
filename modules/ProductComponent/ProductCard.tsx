@@ -11,8 +11,9 @@ import { IProduct } from './Products';
 
 interface IProductCard {
   product: IProduct;
+  onDelete: (product: IProduct) => void;
 }
-const ProductCard: FC<IProductCard> = ({ product }) => {
+const ProductCard: FC<IProductCard> = ({ product, onDelete }) => {
   const [hasLoggedIn, setHasLoggedIn] = useState<boolean>(false);
   const dispatch = useDispatch();
 
@@ -50,14 +51,14 @@ const ProductCard: FC<IProductCard> = ({ product }) => {
               <MenuList>
                 <NextLink href={`/product/edit/${product.id}`}>
                   <MenuItem
-                    onClick={(): void => {
+                    onClick={() => {
                       dispatch(setSelectedProduct(product));
                     }}
                   >
                     Edit
                   </MenuItem>
                 </NextLink>
-                <MenuItem>Delete</MenuItem>
+                <MenuItem onClick={() => onDelete(product)}>Delete</MenuItem>
               </MenuList>
             </Menu>
           </Box>
@@ -66,7 +67,7 @@ const ProductCard: FC<IProductCard> = ({ product }) => {
         )}
         <NextLink href={`/product/${product.id}`}>
           <div
-            onClick={(): void => {
+            onClick={() => {
               dispatch(setSelectedProduct(product));
             }}
           >
@@ -82,7 +83,7 @@ const ProductCard: FC<IProductCard> = ({ product }) => {
             fontWeight="bold"
             as="h4"
             lineHeight="tight"
-            onClick={(): void => {
+            onClick={() => {
               dispatch(setSelectedProduct(product));
             }}
             isTruncated
