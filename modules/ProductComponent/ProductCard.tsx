@@ -11,8 +11,9 @@ import { IProduct } from './Products';
 
 interface IProductCard {
   product: IProduct;
+  onDelete: (product: IProduct) => void;
 }
-const ProductCard: FC<IProductCard> = ({ product }) => {
+const ProductCard: FC<IProductCard> = ({ product, onDelete }) => {
   const [hasLoggedIn, setHasLoggedIn] = useState<boolean>(false);
   const dispatch = useDispatch();
 
@@ -57,7 +58,7 @@ const ProductCard: FC<IProductCard> = ({ product }) => {
                     Edit
                   </MenuItem>
                 </NextLink>
-                <MenuItem>Delete</MenuItem>
+                <MenuItem onClick={(): void => onDelete(product)}>Delete</MenuItem>
               </MenuList>
             </Menu>
           </Box>

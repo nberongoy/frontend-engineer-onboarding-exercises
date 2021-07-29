@@ -23,7 +23,7 @@ import styles from '@styles/Product.module.css';
 import { UPDATE_PRODUCT } from 'apollo/mutations/product';
 import NextLink from 'next/link';
 import Router from 'next/router';
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { productForm } from './validation';
@@ -33,7 +33,7 @@ interface IProductFormData {
   description: string;
 }
 
-const UpdateProduct: FC = () => {
+const UpdateProduct: React.FC = () => {
   // filter query working correctly
   // const router = useRouter();
   // const { id } = router.query;
@@ -84,10 +84,6 @@ const UpdateProduct: FC = () => {
     }
   };
 
-  const onCancel = (): void => {
-    Router.back();
-  };
-
   return (
     <Box p="110" pt="50">
       <Box mb="5">
@@ -132,7 +128,7 @@ const UpdateProduct: FC = () => {
               </FormControl>
 
               <Box mt="10" textAlign="right">
-                <Button variant="outline" mr="4" width={178} onClick={onCancel}>
+                <Button variant="outline" mr="4" width={178} onClick={(): void => Router.back()}>
                   Cancel
                 </Button>
                 <Button type="submit" colorScheme="purple" width={178}>
