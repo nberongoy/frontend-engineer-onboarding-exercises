@@ -64,7 +64,7 @@ const Products: React.FC = ({}) => {
           <Box mt="10" key={i}>
             <ProductCard
               product={product.node}
-              onDelete={(productDelete: IProduct): void => {
+              onDelete={(productDelete: IProduct) => {
                 setProduct(productDelete);
                 onOpen();
               }}

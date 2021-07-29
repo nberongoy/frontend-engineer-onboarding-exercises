@@ -51,14 +51,14 @@ const ProductCard: FC<IProductCard> = ({ product, onDelete }) => {
               <MenuList>
                 <NextLink href={`/product/edit/${product.id}`}>
                   <MenuItem
-                    onClick={(): void => {
+                    onClick={() => {
                       dispatch(setSelectedProduct(product));
                     }}
                   >
                     Edit
                   </MenuItem>
                 </NextLink>
-                <MenuItem onClick={(): void => onDelete(product)}>Delete</MenuItem>
+                <MenuItem onClick={() => onDelete(product)}>Delete</MenuItem>
               </MenuList>
             </Menu>
           </Box>
@@ -67,7 +67,7 @@ const ProductCard: FC<IProductCard> = ({ product, onDelete }) => {
         )}
         <NextLink href={`/product/${product.id}`}>
           <div
-            onClick={(): void => {
+            onClick={() => {
               dispatch(setSelectedProduct(product));
             }}
           >
@@ -83,7 +83,7 @@ const ProductCard: FC<IProductCard> = ({ product, onDelete }) => {
             fontWeight="bold"
             as="h4"
             lineHeight="tight"
-            onClick={(): void => {
+            onClick={() => {
               dispatch(setSelectedProduct(product));
             }}
             isTruncated

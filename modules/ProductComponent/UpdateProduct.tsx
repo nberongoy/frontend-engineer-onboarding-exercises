@@ -128,7 +128,7 @@ const UpdateProduct: React.FC = () => {
               </FormControl>
 
               <Box mt="10" textAlign="right">
-                <Button variant="outline" mr="4" width={178} onClick={(): void => Router.back()}>
+                <Button variant="outline" mr="4" width={178} onClick={() => Router.back()}>
                   Cancel
                 </Button>
                 <Button type="submit" colorScheme="purple" width={178}>
