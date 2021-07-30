@@ -1,12 +1,10 @@
 import { Box, Button, IconButton, Image, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react';
-import { setSelectedProduct } from '@store/slice/productSlice';
 import styles from '@styles/Product.module.css';
 import { isLoggedIn } from '@utils/helper/auth';
 import NextLink from 'next/link';
 import React, { FC, useEffect, useState } from 'react';
 import { BiDotsVerticalRounded } from 'react-icons/bi';
 import { MdShoppingCart } from 'react-icons/md';
-import { useDispatch } from 'react-redux';
 import { IProduct } from './Products';
 
 interface IProductCard {
@@ -15,7 +13,6 @@ interface IProductCard {
 }
 const ProductCard: FC<IProductCard> = ({ product, onDelete }) => {
   const [hasLoggedIn, setHasLoggedIn] = useState<boolean>(false);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     setHasLoggedIn(isLoggedIn());
@@ -50,13 +47,7 @@ const ProductCard: FC<IProductCard> = ({ product, onDelete }) => {
               />
               <MenuList>
                 <NextLink href={`/product/edit/${product.id}`}>
-                  <MenuItem
-                    onClick={() => {
-                      dispatch(setSelectedProduct(product));
-                    }}
-                  >
-                    Edit
-                  </MenuItem>
+                  <MenuItem>Edit</MenuItem>
                 </NextLink>
                 <MenuItem onClick={() => onDelete(product)}>Delete</MenuItem>
               </MenuList>
@@ -66,28 +57,13 @@ const ProductCard: FC<IProductCard> = ({ product, onDelete }) => {
           ''
         )}
         <NextLink href={`/product/${product.id}`}>
-          <div
-            onClick={() => {
-              dispatch(setSelectedProduct(product));
-            }}
-          >
-            <Image src={product.imageUrl} alt={product.imageAlt} className={styles.cardImage} />
-          </div>
+          <Image src={product.imageUrl} alt={product.imageAlt} className={styles.cardImage} />
         </NextLink>
       </Box>
 
       <Box p="6">
         <NextLink href={`/product/${product.id}`}>
-          <Box
-            mt="1"
-            fontWeight="bold"
-            as="h4"
-            lineHeight="tight"
-            onClick={() => {
-              dispatch(setSelectedProduct(product));
-            }}
-            isTruncated
-          >
+          <Box mt="1" fontWeight="bold" as="h4" lineHeight="tight" isTruncated>
             {product.name}
           </Box>
         </NextLink>

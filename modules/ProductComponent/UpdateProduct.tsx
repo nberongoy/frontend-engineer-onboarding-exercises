@@ -1,4 +1,4 @@
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import {
   Box,
@@ -18,14 +18,13 @@ import {
 } from '@chakra-ui/react';
 import Upload from '@components/Upload';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { RootState } from '@store/store';
 import styles from '@styles/Product.module.css';
 import { UPDATE_PRODUCT } from 'apollo/mutations/product';
+import { FETCH_PRODUCTS } from 'apollo/queries/products';
 import NextLink from 'next/link';
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
 import { productForm } from './validation';
 
 interface IProductFormData {
@@ -34,14 +33,10 @@ interface IProductFormData {
 }
 
 const UpdateProduct: React.FC = () => {
-  // filter query working correctly
-  // const router = useRouter();
-  // const { id } = router.query;
-  // const { data } = useQuery(FETCH_PRODUCTS, {
-  //   variables: { first: 1, filter: { id: { eq: id } } },
-  // });
+  const router = useRouter();
+  const { id } = router.query;
+  const { data } = useQuery(FETCH_PRODUCTS, { variables: { filter: { id: { eq: id } } } });
 
-  const productState = useSelector((state: RootState) => state.product.selectedProduct);
   const [productId, setProductId] = useState<string | undefined>('');
 
   const {
@@ -54,10 +49,15 @@ const UpdateProduct: React.FC = () => {
   });
 
   useEffect(() => {
-    setValue('name', productState.name, { shouldDirty: true });
-    setValue('description', productState.description, { shouldDirty: true });
-    setProductId(productState.id);
-  }, [setValue, productState]);
+    if (data) {
+      const { products } = data;
+      const { edges } = products;
+      const { node } = edges[0];
+      setValue('name', node.name, { shouldDirty: true });
+      setValue('description', node.description, { shouldDirty: true });
+      setProductId(node.id);
+    }
+  }, [setValue, data]);
 
   const toast = useToast();
   const [updateProduct] = useMutation(UPDATE_PRODUCT);

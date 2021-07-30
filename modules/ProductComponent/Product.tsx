@@ -1,3 +1,4 @@
+import { useQuery } from '@apollo/client';
 import { ChevronRightIcon, DeleteIcon, Icon } from '@chakra-ui/icons';
 import {
   Box,
@@ -11,40 +12,45 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import { RootState } from '@store/store';
 import styles from '@styles/Product.module.css';
 import { isLoggedIn } from '@utils/helper/auth';
+import { FETCH_PRODUCTS } from 'apollo/queries/products';
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
 import React, { FC, useEffect, useState } from 'react';
 import { FaEdit } from 'react-icons/fa';
 import { MdShoppingCart } from 'react-icons/md';
-import { useSelector } from 'react-redux';
 import ProductDeleteModal from './DeleteProdcut';
 import { IProduct } from './Products';
 
 const Product: FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  // filter api not return correctly
-
-  // const router = useRouter();
-  // const { id } = router.query;
-  // filter api not return correctly
-  // const variablesQuery = { variables: { filter: { id: { eq: id } } } };
-  // const { data } = useQuery(FETCH_PRODUCTS, variablesQuery);
-
-  const productState = useSelector((state: RootState) => state.product.selectedProduct);
+  const router = useRouter();
+  const { id } = router.query;
+  const { data } = useQuery(FETCH_PRODUCTS, { variables: { filter: { id: { eq: id } } } });
 
   const [hasLoggedIn, setHasLoggedIn] = useState<boolean>(false);
-  const product = {
-    ...productState,
+  const [product, setProduct] = useState<IProduct>({
+    id: '',
+    description: '',
+    name: '',
     imageUrl: '/media_placeholder_2.png',
     imageAlt: 'Product image',
-  } as IProduct;
+  });
 
   useEffect(() => {
     setHasLoggedIn(isLoggedIn());
   }, []);
+
+  useEffect(() => {
+    if (data) {
+      const { products } = data;
+      const { edges } = products;
+      const { node } = edges[0];
+      setProduct({ ...product, ...node });
+    }
+  }, [data]);
 
   return (
     <Box p="110" pt="50">

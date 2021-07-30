@@ -1,7 +1,7 @@
 import Footer from '@components/Footer';
 import { useRouter } from 'next/router';
 import React, { FC } from 'react';
-import Navigation from '../Navigation';
+import Navigation from './Navigation';
 
 const Layout: FC = ({ children }) => {
   const router = useRouter();
