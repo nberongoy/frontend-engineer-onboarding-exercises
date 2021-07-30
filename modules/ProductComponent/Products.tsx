@@ -1,13 +1,12 @@
 import { useQuery } from '@apollo/client';
 import { AddIcon } from '@chakra-ui/icons';
-import { Box, Button, ButtonProps, Divider, Grid, Heading, Spacer, Text, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Divider, Grid, Heading, Spacer, useDisclosure } from '@chakra-ui/react';
+import Pagination from '@components/Pagination';
 import { isLoggedIn } from '@utils/helper/auth';
 import { FETCH_PRODUCTS } from 'apollo/queries/products';
-import { Container, Next, PageGroup, Paginator, Previous, usePaginator } from 'chakra-paginator';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { CgArrowLongLeft, CgArrowLongRight } from 'react-icons/cg';
 import ProductDeleteModal from './DeleteProdcut';
 import ProductCard from './ProductCard';
 
@@ -54,13 +53,10 @@ const Products: React.FC = ({}) => {
   const router = useRouter();
   const { pathname } = router;
 
-  // constants
-  const outerLimit = 2;
-  const innerLimit = 2;
-
   const [hasLoggedIn, setHasLoggedIn] = useState<boolean>(false);
   const [products, setProducts] = useState<Array<IProductEdge[]>>([[]]);
   const [product, setProduct] = useState<IProduct>({ id: '', name: '', description: '' });
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   useEffect(() => {
     setHasLoggedIn(isLoggedIn());
@@ -71,51 +67,6 @@ const Products: React.FC = ({}) => {
       setProducts(setProductPages(data.products.edges));
     }
   }, [data]);
-
-  const { isDisabled, currentPage, setCurrentPage, pagesQuantity } = usePaginator({
-    total: data ? data.products.edges.length : 0,
-    initialState: {
-      pageSize: 12,
-      currentPage: 1,
-      isDisabled: false,
-    },
-  });
-
-  // styles
-  const baseStyles: ButtonProps = {
-    w: 10,
-    fontSize: 14,
-    borderRadius: 0,
-  };
-
-  const normalStyles: ButtonProps = {
-    ...baseStyles,
-    _hover: {
-      bg: 'transparent',
-      color: '#4F46E5',
-    },
-    bg: 'transparent',
-  };
-
-  const activeStyles: ButtonProps = {
-    ...baseStyles,
-    _hover: {
-      bg: 'transparent',
-    },
-    bg: 'transparent',
-    color: '#4F46E5',
-    borderTopWidth: 1,
-    borderTopColor: '#4F46E5',
-  };
-
-  const separatorStyles: ButtonProps = {
-    w: 7,
-    bg: 'transparent',
-  };
-
-  const handlePageChange = (pageNumber: any) => {
-    setCurrentPage(pageNumber);
-  };
 
   return (
     <Box p="110">
@@ -148,29 +99,10 @@ const Products: React.FC = ({}) => {
         ))}
       </Grid>
 
-      <Paginator
-        isDisabled={isDisabled}
-        activeStyles={activeStyles}
-        innerLimit={innerLimit}
-        currentPage={currentPage}
-        outerLimit={outerLimit}
-        normalStyles={normalStyles}
-        separatorStyles={separatorStyles}
-        pagesQuantity={pagesQuantity}
-        onPageChange={handlePageChange}
-      >
-        <Container mt="5" align="center" justify="space-between" w="full" p={4}>
-          <Previous bg="transparent">
-            <CgArrowLongLeft /> <Text ml="5">Previous</Text>
-            {/* Or an icon from `react-icons` */}
-          </Previous>
-          <PageGroup isInline align="center" />
-          <Next bg="transparent">
-            <Text mr="5">Next</Text> <CgArrowLongRight />
-            {/* Or an icon from `react-icons` */}
-          </Next>
-        </Container>
-      </Paginator>
+      <Pagination
+        total={data ? data.products.edges.length : 0}
+        onPageNumber={(pageNumber: number) => setCurrentPage(pageNumber)}
+      />
 
       <ProductDeleteModal isOpen={isOpen} onClose={onClose} productId={product.id || ''} />
     </Box>
